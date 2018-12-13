@@ -148,7 +148,7 @@ namespace Examen1.SistemasOperativos.WinApp
         }
         private void escribirLog()
         {
-            log.Info("Recursos");
+            log.Info("Recursos ");
             planificador.Recursos.ForEach(r => log.Info(r.ToString()));
             log.Info("Procesos");
             planificador.Procesos.ForEach(p => log.Info(p.ToString()));
