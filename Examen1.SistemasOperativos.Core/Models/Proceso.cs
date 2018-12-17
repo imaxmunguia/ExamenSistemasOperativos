@@ -18,11 +18,12 @@ namespace Examen1.SistemasOperativos.Core.Models
                                                                       SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaRecursosProceso))
                                .Select(recurso => recurso.Id)
                                .ToList();
-            Tiempo = GeneradorAleatorio.GenerarEntero(SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaTiempoProceso,
-                                                           SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaTiempoProceso);
+            Tiempo = GeneradorAleatorio.GenerarEnteroMultiplo2(SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaTiempoProceso,
+                                                               SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaTiempoProceso);
             TiempoRestante = this.Tiempo;
             Estado = (int)EstadosProceso.Estado.Nuevo;
             Turno = Id;
+            Prioridad = GeneradorAleatorio.GenerarEntero(1, 10);
         }
         public int Id { get; set; }
         public int Estado { get; set; }
@@ -30,6 +31,7 @@ namespace Examen1.SistemasOperativos.Core.Models
         public int TiempoRestante { get; set; }
         public int Ciclos { get; set; }
         public int Turno { get; set; }
+        public int Prioridad { get; set; }
         public List<int> Recursos { get; set; }
 
         public override string ToString()

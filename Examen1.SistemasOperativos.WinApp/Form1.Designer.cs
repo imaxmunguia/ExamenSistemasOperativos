@@ -48,6 +48,7 @@
             this.dtMemoria = new System.Windows.Forms.DataGridView();
             this.dt = new System.Windows.Forms.DataGridView();
             this.cmbAlgoritmoMemoria = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtProcesadores)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtProcesos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtRecursos)).BeginInit();
@@ -58,17 +59,17 @@
             // dtProcesadores
             // 
             this.dtProcesadores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtProcesadores.Location = new System.Drawing.Point(971, 55);
+            this.dtProcesadores.Location = new System.Drawing.Point(757, 55);
             this.dtProcesadores.Margin = new System.Windows.Forms.Padding(4);
             this.dtProcesadores.Name = "dtProcesadores";
             this.dtProcesadores.RowTemplate.Height = 24;
-            this.dtProcesadores.Size = new System.Drawing.Size(845, 762);
+            this.dtProcesadores.Size = new System.Drawing.Size(845, 661);
             this.dtProcesadores.TabIndex = 0;
             // 
             // cmbProcesadores
             // 
             this.cmbProcesadores.FormattingEnabled = true;
-            this.cmbProcesadores.Location = new System.Drawing.Point(1465, 24);
+            this.cmbProcesadores.Location = new System.Drawing.Point(1250, 22);
             this.cmbProcesadores.Margin = new System.Windows.Forms.Padding(4);
             this.cmbProcesadores.Name = "cmbProcesadores";
             this.cmbProcesadores.Size = new System.Drawing.Size(50, 24);
@@ -78,7 +79,7 @@
             // cmbNucleos
             // 
             this.cmbNucleos.FormattingEnabled = true;
-            this.cmbNucleos.Location = new System.Drawing.Point(1574, 24);
+            this.cmbNucleos.Location = new System.Drawing.Point(1359, 22);
             this.cmbNucleos.Margin = new System.Windows.Forms.Padding(4);
             this.cmbNucleos.Name = "cmbNucleos";
             this.cmbNucleos.Size = new System.Drawing.Size(50, 24);
@@ -88,7 +89,7 @@
             // cmbVelocidadSimulacion
             // 
             this.cmbVelocidadSimulacion.FormattingEnabled = true;
-            this.cmbVelocidadSimulacion.Location = new System.Drawing.Point(1716, 24);
+            this.cmbVelocidadSimulacion.Location = new System.Drawing.Point(1501, 22);
             this.cmbVelocidadSimulacion.Margin = new System.Windows.Forms.Padding(4);
             this.cmbVelocidadSimulacion.Name = "cmbVelocidadSimulacion";
             this.cmbVelocidadSimulacion.Size = new System.Drawing.Size(100, 24);
@@ -109,7 +110,7 @@
             // 
             this.lblProcesadores.AutoSize = true;
             this.lblProcesadores.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProcesadores.Location = new System.Drawing.Point(1351, 27);
+            this.lblProcesadores.Location = new System.Drawing.Point(1136, 25);
             this.lblProcesadores.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblProcesadores.Name = "lblProcesadores";
             this.lblProcesadores.Size = new System.Drawing.Size(106, 16);
@@ -120,7 +121,7 @@
             // 
             this.lblNucleos.AutoSize = true;
             this.lblNucleos.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNucleos.Location = new System.Drawing.Point(1523, 27);
+            this.lblNucleos.Location = new System.Drawing.Point(1308, 25);
             this.lblNucleos.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblNucleos.Name = "lblNucleos";
             this.lblNucleos.Size = new System.Drawing.Size(43, 16);
@@ -131,7 +132,7 @@
             // 
             this.lblVelocidadSimulacion.AutoSize = true;
             this.lblVelocidadSimulacion.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVelocidadSimulacion.Location = new System.Drawing.Point(1632, 27);
+            this.lblVelocidadSimulacion.Location = new System.Drawing.Point(1417, 25);
             this.lblVelocidadSimulacion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblVelocidadSimulacion.Name = "lblVelocidadSimulacion";
             this.lblVelocidadSimulacion.Size = new System.Drawing.Size(76, 16);
@@ -151,7 +152,7 @@
             // 
             // btnSimular
             // 
-            this.btnSimular.Location = new System.Drawing.Point(680, 821);
+            this.btnSimular.Location = new System.Drawing.Point(1318, 818);
             this.btnSimular.Name = "btnSimular";
             this.btnSimular.Size = new System.Drawing.Size(158, 28);
             this.btnSimular.TabIndex = 23;
@@ -166,7 +167,7 @@
             this.dtProcesos.Margin = new System.Windows.Forms.Padding(4);
             this.dtProcesos.Name = "dtProcesos";
             this.dtProcesos.RowTemplate.Height = 24;
-            this.dtProcesos.Size = new System.Drawing.Size(503, 356);
+            this.dtProcesos.Size = new System.Drawing.Size(701, 356);
             this.dtProcesos.TabIndex = 24;
             // 
             // dtRecursos
@@ -176,7 +177,7 @@
             this.dtRecursos.Margin = new System.Windows.Forms.Padding(4);
             this.dtRecursos.Name = "dtRecursos";
             this.dtRecursos.RowTemplate.Height = 24;
-            this.dtRecursos.Size = new System.Drawing.Size(503, 353);
+            this.dtRecursos.Size = new System.Drawing.Size(701, 353);
             this.dtRecursos.TabIndex = 25;
             // 
             // bgw
@@ -186,7 +187,7 @@
             // 
             // btnPlanificar
             // 
-            this.btnPlanificar.Location = new System.Drawing.Point(844, 821);
+            this.btnPlanificar.Location = new System.Drawing.Point(1482, 818);
             this.btnPlanificar.Name = "btnPlanificar";
             this.btnPlanificar.Size = new System.Drawing.Size(120, 28);
             this.btnPlanificar.TabIndex = 26;
@@ -196,7 +197,7 @@
             // 
             // btnBloqueo
             // 
-            this.btnBloqueo.Location = new System.Drawing.Point(522, 821);
+            this.btnBloqueo.Location = new System.Drawing.Point(1160, 818);
             this.btnBloqueo.Name = "btnBloqueo";
             this.btnBloqueo.Size = new System.Drawing.Size(152, 28);
             this.btnBloqueo.TabIndex = 27;
@@ -206,7 +207,7 @@
             // 
             // btnAgregarRecurso
             // 
-            this.btnAgregarRecurso.Location = new System.Drawing.Point(380, 13);
+            this.btnAgregarRecurso.Location = new System.Drawing.Point(578, 16);
             this.btnAgregarRecurso.Name = "btnAgregarRecurso";
             this.btnAgregarRecurso.Size = new System.Drawing.Size(135, 35);
             this.btnAgregarRecurso.TabIndex = 28;
@@ -216,7 +217,7 @@
             // 
             // btnAgregarProceso
             // 
-            this.btnAgregarProceso.Location = new System.Drawing.Point(381, 415);
+            this.btnAgregarProceso.Location = new System.Drawing.Point(578, 415);
             this.btnAgregarProceso.Name = "btnAgregarProceso";
             this.btnAgregarProceso.Size = new System.Drawing.Size(135, 35);
             this.btnAgregarProceso.TabIndex = 29;
@@ -226,34 +227,56 @@
             // 
             // dtMemoria
             // 
-            this.dtMemoria.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtMemoria.Location = new System.Drawing.Point(972, 824);
+            this.dtMemoria.AllowUserToAddRows = false;
+            this.dtMemoria.AllowUserToDeleteRows = false;
+            this.dtMemoria.AllowUserToOrderColumns = true;
+            this.dtMemoria.AllowUserToResizeColumns = false;
+            this.dtMemoria.AllowUserToResizeRows = false;
+            this.dtMemoria.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dtMemoria.ColumnHeadersVisible = false;
+            this.dtMemoria.Location = new System.Drawing.Point(757, 723);
             this.dtMemoria.Name = "dtMemoria";
-            this.dtMemoria.Size = new System.Drawing.Size(845, 25);
+            this.dtMemoria.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dtMemoria.RowTemplate.ReadOnly = true;
+            this.dtMemoria.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtMemoria.Size = new System.Drawing.Size(845, 92);
             this.dtMemoria.TabIndex = 30;
             // 
             // dt
             // 
             this.dt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dt.Location = new System.Drawing.Point(522, 55);
+            this.dt.Location = new System.Drawing.Point(720, 55);
             this.dt.Name = "dt";
-            this.dt.Size = new System.Drawing.Size(442, 760);
+            this.dt.Size = new System.Drawing.Size(30, 760);
             this.dt.TabIndex = 31;
+            this.dt.Visible = false;
             // 
             // cmbAlgoritmoMemoria
             // 
             this.cmbAlgoritmoMemoria.FormattingEnabled = true;
-            this.cmbAlgoritmoMemoria.Location = new System.Drawing.Point(309, 821);
+            this.cmbAlgoritmoMemoria.Location = new System.Drawing.Point(509, 821);
             this.cmbAlgoritmoMemoria.Margin = new System.Windows.Forms.Padding(4);
             this.cmbAlgoritmoMemoria.Name = "cmbAlgoritmoMemoria";
             this.cmbAlgoritmoMemoria.Size = new System.Drawing.Size(204, 24);
             this.cmbAlgoritmoMemoria.TabIndex = 32;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(361, 821);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(140, 16);
+            this.label1.TabIndex = 33;
+            this.label1.Text = "Algoritmo Memoria";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1829, 861);
+            this.ClientSize = new System.Drawing.Size(1615, 861);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbAlgoritmoMemoria);
             this.Controls.Add(this.dt);
             this.Controls.Add(this.dtMemoria);
@@ -311,6 +334,7 @@
         private System.Windows.Forms.DataGridView dtMemoria;
         private System.Windows.Forms.DataGridView dt;
         private System.Windows.Forms.ComboBox cmbAlgoritmoMemoria;
+        private System.Windows.Forms.Label label1;
     }
 }
 

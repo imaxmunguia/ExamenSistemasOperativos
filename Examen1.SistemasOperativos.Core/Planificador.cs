@@ -14,6 +14,7 @@ namespace Examen1.SistemasOperativos.Core
         public List<Procesador> Procesadores;
         public List<Proceso> Procesos;
         public List<Recurso> Recursos;
+        public List<Recurso> Memoria;
         public int contador_bloqueo;
 
         public Planificador()
@@ -21,6 +22,7 @@ namespace Examen1.SistemasOperativos.Core
             this.Procesadores = new List<Procesador>();
             this.Recursos = new List<Recurso>();
             this.Procesos = new List<Proceso>();
+            this.Memoria = crearMemoria();
         }
 
         public void agregarProcesadores()
@@ -34,6 +36,20 @@ namespace Examen1.SistemasOperativos.Core
                                      {
                                          Id = i,
                                          Nucleos = cantidadNucleosProcesador
+                                     })
+                                     .ToList();
+        }
+
+        public List<Recurso> crearMemoria()
+        {
+            var cantidadProcesadores = SingletonSimuladorConfigurationFactory.Instance.CantidadProcesadores;
+            var cantidadNucleosProcesador = SingletonSimuladorConfigurationFactory.Instance.CantidadNucleosProcesador;
+
+            return Enumerable.Range(1, 64)
+                                     .Select(i => new Recurso(i)
+                                     {
+                                         Apropiacion = 1,
+                                         EsApropiativo = false                                          
                                      })
                                      .ToList();
         }
@@ -53,16 +69,19 @@ namespace Examen1.SistemasOperativos.Core
 
             //Ordenamos los procesos que deben entrar al procesador segun el algoritmo de planificacion de procesos
             var procesosListos = Procesos.Where(p => p.TiempoRestante > 0)
-                                         .OrderBy(p => SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 0 ? p.Id : p.Turno)
+                                         .OrderBy(p => SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 1 ? p.Prioridad :
+                                                       SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 2 ? p.Turno     : p.Id)
                                          .Take(Procesadores.Count)
                                          .ToList();
 
-            if (SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 1)
-                lock (objLock) Recursos.ToList()
-                                       .ForEach(recurso => recurso.ProcesosRegistrados.RemoveAll(p => true));
+            if (SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 2)
+                lock (objLock) Recursos.ToList().ForEach(recurso => recurso.ProcesosRegistrados.RemoveAll(p => true));
 
             //Calculamos orden de Round Robin
             Procesos.ToList().ForEach(s => s.Turno = s.Turno == 1 ? Procesos.Count : s.Turno - 1);
+
+            //Simular bloqueos
+            registrarBloqueo(procesosListos);
 
             Parallel.ForEach(Procesadores.OrderBy(obj => Guid.NewGuid()), procesador =>
             {
@@ -78,6 +97,7 @@ namespace Examen1.SistemasOperativos.Core
                 {
                     try
                     {
+                        cargarProcesoEnMemoria(proceso);
                         registrarProcesoEnRecursos(proceso);
 
                         Procesos.First(p => p.Id == proceso.Id).Ciclos++;
@@ -134,19 +154,45 @@ namespace Examen1.SistemasOperativos.Core
             }
         }
 
+        public void cargarProcesoEnMemoria(Proceso proceso)
+        {
+            var marcosOcupaProceso = proceso.TiempoRestante / SingletonSimuladorConfigurationFactory.Instance.TamanioMarcoPagina;
+
+            var marcosPaginaLibres = Memoria.Where(marco => !marco.ProcesosRegistrados.Any()).ToList();
+
+            if (marcosPaginaLibres.Count != 0)
+                marcosPaginaLibres.ForEach(marco => 
+                {
+                    marco.ProcesosRegistrados.Add(proceso.Id);
+                    marcosOcupaProceso--;
+                });
+        }
+
         public void registrarBloqueo(List<Proceso> procesosEjecucion)
         {
-            if (SingletonSimuladorConfigurationFactory.Instance.SimularDeadLock && contador_bloqueo != 0)
+            if (SingletonSimuladorConfigurationFactory.Instance.SimularDeadLock)
             {
-                contador_bloqueo = 1;
-                Recursos.First(r => r.Id == 1 && !r.EsApropiativo).ProcesosRegistrados.Add(1);
-                Recursos.First(r => r.Id == 2 && !r.EsApropiativo).ProcesosRegistrados.Add(2);
-            }
-            else
-            {
-                contador_bloqueo = 0;
-                Recursos.First(r => r.Id == 1 && !r.EsApropiativo).ProcesosRegistrados.RemoveAll(x => x == 1);
-                Recursos.First(r => r.Id == 2 && !r.EsApropiativo).ProcesosRegistrados.RemoveAll(x => x == 2);
+                foreach (var p1 in procesosEjecucion)
+                {
+                    foreach (var p2 in procesosEjecucion)
+                    {
+                        if (p1.Id != p2.Id)
+                        {
+                            var rDiferentes = p1.Recursos.Except(p2.Recursos).ToList();
+                            if (rDiferentes.Count == 0 && p1.Recursos.Count==2 && p2.Recursos.Count == 2)
+                            {
+                                var p1R = Recursos.First(r => r.Id == p1.Recursos.FirstOrDefault());
+                                var p2R = Recursos.First(r => r.Id == p2.Recursos.FirstOrDefault(rr=>rr!= p1R.Id));
+
+                                Recursos.First(r1 => r1.Id == p1R.Id).ProcesosRegistrados.RemoveAll(r1 => true);
+                                Recursos.First(r2 => r2.Id == p2R.Id).ProcesosRegistrados.RemoveAll(r2 => true);
+
+                                Recursos.First(r1 => r1.Id == p1R.Id).ProcesosRegistrados.Add(p1.Id);
+                                Recursos.First(r2 => r2.Id == p2R.Id).ProcesosRegistrados.Add(p2.Id);
+                            }
+                        }
+                    }
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Examen1.SistemasOperativos.Core;
 using Examen1.SistemasOperativos.Core.Configs;
+using Examen1.SistemasOperativos.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,18 +28,20 @@ namespace Examen1.SistemasOperativos.WinApp
             planificador = new Planificador();
             inicializarControlesFormulario();
             cargarConfiguracionesSimulador();
+            actualizarMemoria();
         }
         private void cargarConfiguracionesSimulador()
         {
             //Configuracion de Recursos
-            SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaRecursoApropiacion = 1;
-            SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaRecursoApropiacion = 4;
+            SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaRecursoApropiacion = 2;
+            SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaRecursoApropiacion = 2;
 
             //Configuracion de Procesos
-            SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaRecursosProceso = 2;
+            SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaRecursosProceso = 1;
             SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaRecursosProceso = 2;
-            SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaTiempoProceso = 100;
-            SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaTiempoProceso = 400;
+            SingletonSimuladorConfigurationFactory.Instance.CantidadMinimaTiempoProceso = 1;
+            SingletonSimuladorConfigurationFactory.Instance.CantidadMaximaTiempoProceso = 2;
+            SingletonSimuladorConfigurationFactory.Instance.TamanioMarcoPagina = 16;
         }
         private void inicializarControlesFormulario()
         {
@@ -61,11 +64,17 @@ namespace Examen1.SistemasOperativos.WinApp
 
             //Algoritmo para planificar procesos
             cmbAlgoritmoSimulacion.DataSource = new List<Item> {
-                new Item("SJF",0),
+                new Item("FiFo",0),
                 new Item("Prioridad",1),
-                new Item("Round Robin",2)
+                new Item("Round Robin",2),
+                new Item("SJF",3)
             };
             cmbAlgoritmoSimulacion.SelectedIndex = 0;
+
+            cmbAlgoritmoMemoria.DataSource = new List<Item> {
+                new Item("FiFo",0)
+            };
+            cmbAlgoritmoMemoria.SelectedIndex = 0;
         }
 
         private void btnSimular_Click(object sender, EventArgs e)
@@ -100,6 +109,7 @@ namespace Examen1.SistemasOperativos.WinApp
 
             actualizarProcesos();
             actualizarRecursos();
+            actualizarMemoria();
 
 
             //Seguir el ciclo
@@ -132,19 +142,43 @@ namespace Examen1.SistemasOperativos.WinApp
         {
             var estados = new string[] { "Nuevo", "Listo", "Ejecucion", "Bloqueo", "Terminado" };
             dtProcesos.Columns.Clear();
-            var procesos = planificador.Procesos.OrderBy(p => p.Id).Select(s => new { ProcesoId = "P" + s.Id, Estado = estados[s.Estado - 1], Tiempo = s.Tiempo, Recursos = $"[{string.Join(",", s.Recursos)}]" }).ToList();
+            var procesos = planificador.Procesos
+                                       .OrderBy(p => SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 1 ? p.Prioridad :
+                                                     SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 2 ? p.Turno      : p.Id)
+                                       .Select(s => new
+                                       {
+                                            ProcesoId = "P" + s.Id,
+                                            Estado = estados[s.Estado - 1],
+                                            Orden = SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 1 ? s.Prioridad :
+                                                    SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion == 2 ? s.Turno : s.Id,
+                                            Recursos = $"[{string.Join(",", s.Recursos)}]",
+                                            s.Tiempo,
+                                            Restante = s.TiempoRestante,
+                                            Porc = imprimirProceso(s) 
+                                       }).ToList();
             dtProcesos.DataSource = procesos;
         }
         private void actualizarRecursos()
         {
             dtRecursos.Columns.Clear();
-            var recursos = planificador.Recursos.OrderBy(r => r.Id).Select(r => new { RecursoId = "R" + r.Id, Apropiacion = r.Apropiacion, ProcesosRegistrados = $"[{string.Join(",", r.ProcesosRegistrados)}]" }).ToList();
+            var recursos = planificador.Recursos.OrderBy(r => r.Id).Select(r => new { RecursoId = "R" + r.Id, r.EsApropiativo,r.Apropiacion, ProcesosRegistrados = $"[{string.Join(",", r.ProcesosRegistrados)}]" }).ToList();
             dtRecursos.DataSource = recursos;
         }
         private void limpiarDtProcesadores()
         {
             dtProcesadores.Columns.Clear();
             planificador.Procesadores.ForEach(x => dtProcesadores.Columns.Add($"Procesador{x.Id}", $"Procesador{x.Id}"));
+        }
+        private void actualizarMemoria()
+        {
+            dtMemoria.Columns.Clear();
+            Enumerable.Range(1, 8).ToList().ForEach(x => dtMemoria.Columns.Add($"M{x}", string.Empty));
+
+            var memoria = planificador.Memoria.OrderBy(m => m.Id).Select(m => $"M{m.Id}:{string.Join(",", m.ProcesosRegistrados)}").ToList();
+            dtMemoria.Rows.Add(memoria.Skip(0).Take(8).ToArray());
+            dtMemoria.Rows.Add(memoria.Skip(8).Take(8).ToArray());
+            dtMemoria.Rows.Add(memoria.Skip(16).Take(8).ToArray());
+            dtMemoria.Rows.Add(memoria.Skip(32).Take(8).ToArray());
         }
         private void escribirLog()
         {
@@ -187,6 +221,11 @@ namespace Examen1.SistemasOperativos.WinApp
         private void cmbAlgoritmoSimulacion_SelectedIndexChanged(object sender, EventArgs e)
         {
             SingletonSimuladorConfigurationFactory.Instance.AlgoritmoSimulacion = ((Item)cmbAlgoritmoSimulacion.SelectedValue).Value;
+        }
+        private string imprimirProceso(Proceso proceso)
+        {
+            var porc = (1 - Decimal.Divide(proceso.TiempoRestante, proceso.Tiempo)) * 100;
+            return $"{porc.ToString("0.0")}%";
         }
     }
 }

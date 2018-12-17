@@ -20,6 +20,7 @@ namespace Examen1.SistemasOperativos.Core.Configs
         public int CantidadRecursos { get; set; }
         public int CantidadMinimaRecursoApropiacion { get; set; }
         public int CantidadMaximaRecursoApropiacion { get; set; }
+        public int TamanioMarcoPagina { get; set; }
         public bool SimularDeadLock { get; set; }
         public override string ToString()
         {
