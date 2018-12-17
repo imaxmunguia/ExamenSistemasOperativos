@@ -179,7 +179,7 @@ namespace Examen1.SistemasOperativos.Core
                         if (p1.Id != p2.Id)
                         {
                             var rDiferentes = p1.Recursos.Except(p2.Recursos).ToList();
-                            if (rDiferentes.Count == 0 && p1.Recursos.Count==2 && p2.Recursos.Count == 2)
+                            if (rDiferentes.Count == 0 && p1.Recursos.Count>1 && p2.Recursos.Count > 1)
                             {
                                 var p1R = Recursos.First(r => r.Id == p1.Recursos.FirstOrDefault());
                                 var p2R = Recursos.First(r => r.Id == p2.Recursos.FirstOrDefault(rr=>rr!= p1R.Id));
@@ -193,6 +193,10 @@ namespace Examen1.SistemasOperativos.Core
                         }
                     }
                 }
+            }
+            else
+            {
+                Recursos.ToList().ForEach(recurso => recurso.ProcesosRegistrados.RemoveAll(p => true));
             }
         }
 
